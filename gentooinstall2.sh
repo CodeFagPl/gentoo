@@ -62,16 +62,18 @@ nano /etc/genkernel.conf;
 genkernel --menuconfig --lvm --luks --no-zfs all;
 
 #manual method#
-make menuconfig;
-make && make modules_install;
-make install;
+#make menuconfig;
+#make && make modules_install;
+#make install;
 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 echo 'GRUB_CMDLINE_LINUX="crypt_root=/dev/${lvm}  root=/dev/lvmSystem/volRoot rootfstype=xfs dolvm quiet"' >> /etc/default/grub;
+echo 'GRUB_ENABLE_CRYPTODISK="y"' >> /etc/default/grub;
+
 nano /etc/default/grub;
-grub-install --target=x86_64-efi --efi-directory=/efi /dev/$boot;
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo;
 grub-mkconfig -o /boot/grub/grub.cfg;
 
 
