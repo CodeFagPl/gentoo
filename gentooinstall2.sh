@@ -1,8 +1,8 @@
 #!/bin/bash
 ##Parameters##
-disk=sda
-boot=sda1
-lvm=sda2
+disk=sda;
+boot=sda1;
+lvm=sda2;
 
 #continuation from previous file
 source /etc/profile;
