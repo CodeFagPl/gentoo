@@ -1,4 +1,5 @@
 #!/bin/bash
+##Parameters##
 disk=sda
 boot=sda1
 lvm=sda2
@@ -55,9 +56,15 @@ emerge gentoo-sources genkernel cryptsetup lvm2;
 echo -e "LABEL=SWAP	none	sw	defaults	0 0\nLABEL=BOOT		/efi	vfat	noatime		0 2\nLABEL=ROOT		/	xfs	defaults	0 1\nLABEL=HOME		/home	xfs	defaults	0 1\nLABEL=NODE		/node	xfs	defaults	0 1" >> /etc/fstab;
 
 #genkernel method#
+cd /usr/src/linux;
 #enable LUKS AND LVM
 nano /etc/genkernel.conf;
-genkernel --lvm --luks --no-zfs all;
+genkernel --menuconfig --lvm --luks --no-zfs all;
+
+#manual method#
+make menuconfig;
+make && make modules_install;
+make install;
 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
