@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ##Parameters##
 disk=sda;
 boot=sda1;
