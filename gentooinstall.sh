@@ -68,9 +68,12 @@ mount LABEL=NODE /mnt/gentoo/node;
 #sets current time and date
 stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240303T170409Z/stage3-amd64-hardened-openrc-20240303T170409Z.tar.xz
 ntpd -q -g;
+#installing stage file
 cd /mnt/gentoo;
 wget $stage;
 tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner;
+#change to the directory your file is in
+cp /home/mint/gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall.sh;
 
 #setting make.conf 
 echo 'MAKEOPTS="-j8 -l8"' >> /mnt/gentoo/etc/portage/make.conf;
