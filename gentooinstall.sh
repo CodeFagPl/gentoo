@@ -97,6 +97,7 @@ echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'USE="-kde -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm minimal readline symlink ncurses cryptsetup crypt device-mapper lvm"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'VIDEO_CARDS="intel nvidia"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf;
 
 #chrooting
 cp --dereference /etc/resolv.conf /mnt/gentoo/etc/;
