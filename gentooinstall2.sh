@@ -103,3 +103,4 @@ rc-update add syslog-ng default;
 rc-update add cronie default;
 rc-update add sshd default;
 rc-update add lvm boot;
+env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
