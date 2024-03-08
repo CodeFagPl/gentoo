@@ -96,5 +96,3 @@ mount --types tmpfs --options nosuid,nodev,noexec shm /dev/shm;
 chmod 1777 /dev/shm /run/shm;
 
 chroot /mnt/gentoo /bin/bash;
-source /etc/profile;
-export PS1="(chroot) ${PS1}";
