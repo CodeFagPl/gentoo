@@ -6,7 +6,6 @@ lvm=sda2;
 
 #continuation from previous file
 source /etc/profile;
-export PS1="(chroot) $PS1";
 
 #preparing boot partition
 mkdir /efi;
@@ -38,7 +37,7 @@ emerge --config sys-libs/timezone-data;
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen;
 locale-gen;
 echo -e 'LANG="de_DE.UTF-8"\nLC_COLLATE="C.UTF-8"' >> /etc/env.d/02locale;
-env-update && source /etc/profile && export PS1="(chroot) ${PS1}";
+env-update && source /etc/profile;
 
 
 ##Kernel configuration##
@@ -59,7 +58,7 @@ echo -e "LABEL=SWAP	none	sw	defaults	0 0\nLABEL=BOOT		/efi	vfat	noatime		0 2\nLA
 cd /usr/src/linux;
 #enable LUKS AND LVM
 nano /etc/genkernel.conf;
-genkernel --menuconfig --lvm --luks --no-zfs all;
+genkernel --lvm --luks --no-zfs all;
 
 #manual method#
 #make menuconfig;
@@ -103,4 +102,4 @@ rc-update add syslog-ng default;
 rc-update add cronie default;
 rc-update add sshd default;
 rc-update add lvm boot;
-env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
+env-update && source /etc/profile;
