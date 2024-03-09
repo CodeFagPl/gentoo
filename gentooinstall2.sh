@@ -70,11 +70,11 @@ echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
 beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/'"$lvm";
-end=' root=/dev/lvmSystem/volRoot rootfstype=xfs dolvm quiet"';
+end=' root=LABEL=ROOT rootfstype=xfs dolvm quiet"';
 grubconfig="$beg""$end";
 
 echo "$grubconfig" >> /etc/default/grub;
-echo 'GRUB_ENABLE_CRYPTODISK="y"' >> /etc/default/grub;
+echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
 
 nano /etc/default/grub;
 grub-install --efi-directory=/efi --bootloader-id=Gentoo;
