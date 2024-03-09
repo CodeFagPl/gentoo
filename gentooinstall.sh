@@ -21,9 +21,6 @@ mkfs.vfat -n BOOT -F 32 /dev/$boot;
 #encrypting disk
 cryptsetup -v -y -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random luksFormat /dev/$lvm;
 
-#verifying
-cryptsetup luksDump /dev/$lvm;
-
 #opening disk in order to create lvm
 cryptsetup luksOpen /dev/$lvm lvm-system;
 
@@ -77,7 +74,6 @@ mount LABEL=NODE /mnt/gentoo/node;
 ##Installing Base System##
 #sets current time and date
 stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240303T170409Z/stage3-amd64-hardened-openrc-20240303T170409Z.tar.xz;
-ntpd -q -g;
 
 #installing stage file
 cd /mnt/gentoo;
