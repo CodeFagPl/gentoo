@@ -70,8 +70,8 @@ genkernel --lvm --luks --no-zfs all;
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/"'"$lvm";
-end='root=/dev/lvmSystem/volRoot rootfstype=xfs dolvm quiet';
+beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/'"$lvm";
+end=' root=/dev/lvmSystem/volRoot rootfstype=xfs dolvm quiet"';
 grubconfig="$beg""$end";
 
 echo "$grubconfig" >> /etc/default/grub;
