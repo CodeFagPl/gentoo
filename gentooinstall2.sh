@@ -58,7 +58,6 @@ echo -e "LABEL=SWAP	none	sw	defaults	0 0\nLABEL=BOOT		/efi	vfat	noatime		0 2\nLA
 #genkernel method#
 cd /usr/src/linux;
 #enable LUKS AND LVM
-nano /etc/genkernel.conf;
 genkernel --install --mountboot --lvm --luks --no-zfs all;
 
 #manual method#
@@ -78,7 +77,7 @@ echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK="y"' >> /etc/default/grub;
 
 nano /etc/default/grub;
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo;
+grub-install --efi-directory=/efi --bootloader-id=Gentoo;
 grub-mkconfig -o /boot/grub/grub.cfg;
 
 
