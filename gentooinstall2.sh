@@ -59,7 +59,7 @@ echo -e "LABEL=SWAP	none	sw	defaults	0 0\nLABEL=BOOT		/efi	vfat	noatime		0 2\nLA
 cd /usr/src/linux;
 #enable LUKS AND LVM
 nano /etc/genkernel.conf;
-genkernel --lvm --luks --no-zfs all;
+genkernel --install --mountboot --lvm --luks --no-zfs all;
 
 #manual method#
 #make menuconfig;
