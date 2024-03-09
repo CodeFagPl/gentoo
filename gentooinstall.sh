@@ -8,7 +8,7 @@ lvm=sda2;
 ##Preparing Disks##
 
 #overriting disks with random numbers to increase security can be commented out
-dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;
+#dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;
 
 #opening manual disk partitioning
 fdisk /dev/$disk;
