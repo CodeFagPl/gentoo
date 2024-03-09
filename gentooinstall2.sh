@@ -7,29 +7,30 @@ lvm=sda2;
 #continuation from previous file
 source /etc/profile;
 
-#preparing boot partition
+##Preparing boot partition##
 mkdir /efi;
 mount /dev/$boot /efi;
 
-#updating repository
+##Updating Repository##
 mkdir --parents /etc/portage/repos.conf;
 cp /usr/share/portage/config/repos.conf /etc/portage/repos.conf/gentoo.conf;
 echo "sync-git-verify-commit-signature = yes" >> /etc/portage/repos.conf/gentoo.conf;
 emerge-webrsync;
 
-#adding mirrors
+##Adding Mirrors##
 emerge --verbose --oneshot app-portage/mirrorselect;
 mirrorselect -i -o >> /etc/portage/make.conf;
 emerge --sync;
 
-#adding cpu flags
+##Adding cpu flags##
 emerge app-portage/cpuid2cpuflags;
 echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags;
 
-#updating @world flags
+##Updating @world flags##
 emerge --ask --verbose --update --deep --newuse @world;
 
-#setting Timezone
+##Setting Timezone##
+#edit according to your settings
 echo "Europe/Warsaw" > /etc/timezone;
 emerge --config sys-libs/timezone-data;
 
@@ -68,7 +69,12 @@ genkernel --lvm --luks --no-zfs all;
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
-echo 'GRUB_CMDLINE_LINUX="crypt_root=/dev/${lvm}  root=/dev/lvmSystem/volRoot rootfstype=xfs dolvm quiet"' >> /etc/default/grub;
+
+beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/"'"$lvm";
+end='root=/dev/lvmSystem/volRoot rootfstype=xfs dolvm quiet';
+grubconfig="$beg""$end";
+
+echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK="y"' >> /etc/default/grub;
 
 nano /etc/default/grub;
@@ -90,7 +96,10 @@ rc-service dhcpcd start;
 
 #here insert the name of your net controller
 net=enp4s0;
-echo 'config_${net}="dhcp"' >> /etc/conf.d/net;
+beg='config_'"$net";
+end='="dhcp"';
+netconfig="$beg""$end";
+echo "$netconfig" >> /etc/conf.d/net;
 cd /etc/init.d;
 ln -s net.lo net.$net;
 rc-update add net.$net default;
