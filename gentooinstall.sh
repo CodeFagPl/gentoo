@@ -24,14 +24,10 @@ cryptsetup -v -y -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random luksFo
 #opening disk in order to create lvm
 cryptsetup luksOpen /dev/$lvm lvm-system;
 
-#searches for lvm disks
-lvmdiskscan;
 
 #creates physical  volume
 pvcreate /dev/mapper/lvm-system;
 
-#displays lvm volumes
-pvdisplay;
 
 #creates lvm group of logical volumes
 vgcreate lvmSystem /dev/mapper/lvm-system;
