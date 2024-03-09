@@ -85,7 +85,7 @@ wget $stage;
 tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner;
 
 #change to the directory your file is in
-cp /home/mint/gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall.sh;
+cp /home/mint/gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;
 
 #setting make.conf 
 #edit here to your liking
@@ -94,7 +94,7 @@ echo 'CFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'MAKEOPTS="-j8 -l8"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'USE="-kde -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm minimal bzip2 zstd readline symlink ncurses cryptsetup crypt device-mapper lvm"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'USE="-kde -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm minimal lz4 zstd readline symlink ncurses cryptsetup crypt device-mapper lvm"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'VIDEO_CARDS="intel nvidia"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf;
