@@ -53,12 +53,12 @@ echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
 emerge gentoo-sources genkernel cryptsetup lvm2;
 
 #configuring fstab file
-echo -e "LABEL=SWAP	none	sw	defaults	0 0\nLABEL=BOOT	/efi	vfat	noatime		0 2\nLABEL=ROOT	/	xfs	defaults	0 1\nLABEL=HOME	/home	xfs	defaults	0 1\nLABEL=NODE	/node	xfs	defaults	0 1" >> /etc/fstab;
+echo -e "LABEL=SWAP	  none	  sw	  defaults	0 0\nLABEL=BOOT	  /efi	  vfat	  noatime		0 2\nLABEL=ROOT	  /	  xfs	  defaults	0 1\nLABEL=HOME	  /home	  xfs	  defaults	0 1\nLABEL=NODE	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
 
 #genkernel method#
 cd /usr/src/linux;
 #enable LUKS AND LVM
-genkernel --install --lvm --luks --no-zfs --microcode all;
+genkernel --install --lvm --luks --microcode all;
 
 #manual method#
 #make menuconfig;
@@ -71,12 +71,14 @@ emerge grub gentoolkit;
 
 #beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/'"$lvm";
 #end=' root=LABEL=ROOT rootfstype=xfs dolvm quiet"';
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=UUID=xxx:lvm-system loglevel=3 quiet resume=UUID=yyy net.ifnames=0"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="crypt_root=UUID=uuid dolvm';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
 
 nano /etc/default/grub;
+nano /boot/grub/grub.conf;
+/boot/grub/grub.cfg;
 grub-install --efi-directory=/efi --bootloader-id=Gentoo;
 grub-mkconfig -o /boot/grub/grub.cfg;
 
