@@ -69,9 +69,9 @@ genkernel --install --lvm --luks --no-zfs --microcode all;
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/'"$lvm";
-end=' root=LABEL=ROOT rootfstype=xfs dolvm quiet"';
-grubconfig="$beg""$end";
+#beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/'"$lvm";
+#end=' root=LABEL=ROOT rootfstype=xfs dolvm quiet"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=UUID=xxx:lvm-system loglevel=3 quiet resume=UUID=yyy net.ifnames=0"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
