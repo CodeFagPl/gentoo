@@ -53,7 +53,7 @@ echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
 emerge gentoo-sources genkernel cryptsetup lvm2;
 
 #configuring fstab file
-echo -e "LABEL=SWAP	  none	  sw	  defaults	0 0\nLABEL=BOOT	  /efi	  vfat	  noatime		0 2\nLABEL=ROOT	  /	  xfs	  defaults	0 1\nLABEL=HOME	  /home	  xfs	  defaults	0 1\nLABEL=NODE	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
+echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /efi	  vfat	  noatime		0 2\nUUID=	  /	  xfs	  defaults	0 1\nUUID=	  /home	  xfs	  defaults	0 1\nUUID=	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
 
 #genkernel method#
 cd /usr/src/linux;
