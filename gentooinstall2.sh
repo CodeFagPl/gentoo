@@ -8,8 +8,7 @@ lvm=sda2;
 source /etc/profile;
 
 ##Preparing boot partition##
-mkdir /efi;
-mount /dev/$boot /efi;
+mount /dev/$boot /boot;
 
 ##Updating Repository##
 mkdir --parents /etc/portage/repos.conf;
@@ -45,15 +44,15 @@ env-update && source /etc/profile;
 #installing firmware
 echo "sys-kernel/linux-firmware compress-zstd redistributable" > /etc/portage/package.use/sys-kernel;
 emerge sys-kernel/linux-firmware;
-echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
-emerge sys-firmware/intel-microcode;
+#echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
+#emerge sys-firmware/intel-microcode;
 
 #installing genkernel optional can be commented out and done manually
 echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
 emerge gentoo-sources genkernel cryptsetup lvm2;
 
 #configuring fstab file
-echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /efi	  vfat	  noatime		0 2\nUUID=	  /	  xfs	  defaults	0 1\nUUID=	  /home	  xfs	  defaults	0 1\nUUID=	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
+echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  /	  xfs	  defaults	0 1\nUUID=	  /home	  xfs	  defaults	0 1\nUUID=	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
 
 #genkernel method#
 cd /usr/src/linux;
@@ -77,10 +76,9 @@ echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
 
 nano /etc/default/grub;
-nano /boot/grub/grub.conf;
-/boot/grub/grub.cfg;
-grub-install --efi-directory=/efi --bootloader-id=Gentoo;
+grub-install --efi-directory=/boot --bootloader-id=GRUB --recheck;
 grub-mkconfig -o /boot/grub/grub.cfg;
+nano /boot/grub/grub.cfg;
 
 
 ##Finalization##
