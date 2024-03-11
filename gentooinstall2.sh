@@ -17,8 +17,7 @@ echo "sync-git-verify-commit-signature = yes" >> /etc/portage/repos.conf/gentoo.
 emerge-webrsync;
 
 ##Adding Mirrors##
-emerge --verbose --oneshot app-portage/mirrorselect;
-mirrorselect -i -o >> /etc/portage/make.conf;
+echo 'GENTOO_MIRRORS="http://ftp.vectranet.pl/gentoo/"' >> /etc/portage/make.conf;
 emerge --sync;
 
 ##Adding cpu flags##
@@ -26,7 +25,7 @@ emerge app-portage/cpuid2cpuflags;
 echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags;
 
 ##Updating @world flags##
-emerge --ask --verbose --update --deep --newuse @world;
+emerge --verbose --update --deep --newuse @world;
 
 ##Setting Timezone##
 #edit according to your settings
@@ -53,7 +52,7 @@ emerge gentoo-sources genkernel cryptsetup lvm2;
 
 #configuring fstab file
 echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  /	  xfs	  defaults	0 1\nUUID=	  /home	  xfs	  defaults	0 1\nUUID=	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
-
+nano /etc/fstab;
 #genkernel method#
 cd /usr/src/linux;
 #enable LUKS AND LVM
@@ -110,4 +109,6 @@ rc-update add syslog-ng default;
 rc-update add cronie default;
 rc-update add sshd default;
 rc-update add lvm boot;
+rc-update add device-mapper boot;
+rc-update add dmcrypt boot;
 env-update && source /etc/profile;
