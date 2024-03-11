@@ -37,7 +37,7 @@ emerge --config sys-libs/timezone-data;
 #updating locale
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen;
 locale-gen;
-echo -e 'LANG="de_DE.UTF-8"\nLC_COLLATE="C.UTF-8"' >> /etc/env.d/02locale;
+echo -e 'LANG="en_US.UTF-8"\nLC_COLLATE="C.UTF-8"' >> /etc/env.d/02locale;
 env-update && source /etc/profile;
 
 
