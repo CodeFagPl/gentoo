@@ -71,7 +71,7 @@ emerge grub gentoolkit;
 
 #beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/'"$lvm";
 #end=' root=LABEL=ROOT rootfstype=xfs dolvm quiet"';
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="crypt_root=UUID=uuid dolvm';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="crypt_root=UUID=uuid dolvm"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
