@@ -8,7 +8,7 @@ lvm=sda2;
 ##Preparing Disks##
 
 #overriting disks with random numbers to increase security can be commented out
-#dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;
+dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;
 
 #opening manual disk partitioning
 fdisk /dev/$disk;
@@ -61,6 +61,8 @@ mkfs.$fs -L NODE /dev/lvmSystem/volNode;
 swapon LABEL=SWAP;
 mkdir -p /mnt/gentoo;
 mount LABEL=ROOT /mnt/gentoo;
+mkdir -p /mnt/gentoo/boot;
+mount LABEL=BOOT /mnt/gentoo/boot;
 mkdir -p /mnt/gentoo/home;
 mount LABEL=HOME /mnt/gentoo/home;
 mkdir -p /mnt/gentoo/node;
