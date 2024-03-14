@@ -5,10 +5,8 @@ boot=sda1;
 lvm=sda2;
 
 #continuation from previous file
-source /etc/profile;
+env-update && source /etc/profile;
 
-##Preparing boot partition##
-mount /dev/$boot /boot;
 
 ##Updating Repository##
 mkdir --parents /etc/portage/repos.conf;
@@ -54,6 +52,7 @@ emerge gentoo-sources genkernel cryptsetup lvm2;
 echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  /	  xfs	  defaults	0 1\nUUID=	  /home	  xfs	  defaults	0 1\nUUID=	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
 nano /etc/fstab;
 #genkernel method#
+emerge app-arch/lz4;
 cd /usr/src/linux;
 #enable LUKS AND LVM
 genkernel --install --lvm --luks --microcode all;
@@ -67,9 +66,7 @@ genkernel --install --lvm --luks --microcode all;
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-#beg='GRUB_CMDLINE_LINUX="crypt_root=/dev/'"$lvm";
-#end=' root=LABEL=ROOT rootfstype=xfs dolvm quiet"';
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="crypt_root=UUID=uuid dolvm"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="dolvm crypt_root=UUID=uuid"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
