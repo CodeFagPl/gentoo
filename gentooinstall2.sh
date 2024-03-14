@@ -55,13 +55,15 @@ nano /etc/fstab;
 emerge app-arch/lz4;
 cd /usr/src/linux;
 #enable LUKS AND LVM
-genkernel --install --lvm --luks --microcode all;
-
+echo "sys-kernel/installkernel uki" >> /etc/portage/package.use/sys-kernel;
+emerge sys-kernel/installkernel;
 #manual method#
-#make menuconfig;
-#make && make modules_install;
-#make install;
-
+make menuconfig;
+make && make modules_install;
+make install;
+emerge sys-kernel/dracut;
+echo -e 'compress="lz4"\nadd_dracutmodules+=" crypt lvm dm rootfs-block dbus udev-rules uefi lib"\nfilesystems+=" xfs vfat "\nkernel_cmdline+=" root=UUID=root_uuid rd.luks.uuid=encrypted_uuid"';
+dracut --kver 6.8.0-gentoo; 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
