@@ -45,14 +45,14 @@ emerge sys-kernel/linux-firmware;
 #emerge sys-firmware/intel-microcode;
 
 #installing genkernel optional can be commented out and done manually
-echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
-emerge gentoo-sources genkernel cryptsetup lvm2;
+#echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
+echo "sys-kernel/gentoo-sources experimental" >> /etc/portage/package.use/sys-kernel;
+emerge gentoo-sources cryptsetup lvm2;
 
 #configuring fstab file
 echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  /	  xfs	  defaults	0 1\nUUID=	  /home	  xfs	  defaults	0 1\nUUID=	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
 nano /etc/fstab;
 #genkernel method#
-emerge app-arch/lz4;
 cd /usr/src/linux;
 #enable LUKS AND LVM
 echo "sys-kernel/installkernel uki" >> /etc/portage/package.use/sys-kernel;
