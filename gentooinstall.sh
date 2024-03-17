@@ -35,8 +35,7 @@ vgcreate lvmSystem /dev/mapper/lvm-system;
 #creating logical volumes
 lvcreate --contiguous y --size 16G lvmSystem --name volSwap;
 lvcreate --contiguous y --size 50G lvmSystem --name volRoot;
-lvcreate --contiguous y --size 100G lvmSystem --name volHome;
-lvcreate --contiguous y --extents +100%FREE lvmSystem --name volNode;
+lvcreate --contiguous y --extents +100%FREE lvmSystem --name volHome;
 lvdisplay;
 
 #scans for available lvms
@@ -48,7 +47,7 @@ vgchange;
 
 ##Formatting Partitions##
 #edit this part to your liking
-fs=xfs;
+fs=btrfs;
 
 mkswap -L SWAP /dev/lvmSystem/volSwap;
 mkfs.$fs -L ROOT /dev/lvmSystem/volRoot;
@@ -65,8 +64,7 @@ mkdir -p /mnt/gentoo/boot;
 mount LABEL=BOOT /mnt/gentoo/boot;
 mkdir -p /mnt/gentoo/home;
 mount LABEL=HOME /mnt/gentoo/home;
-mkdir -p /mnt/gentoo/node;
-mount LABEL=NODE /mnt/gentoo/node;
+
 
 
 ##Installing Base System##
@@ -83,13 +81,13 @@ cp /home/mint/gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;
 
 #setting make.conf 
 #edit here to your liking
-echo 'COMMON_FLAGS="-march=skylake -O2 -pipe"' > /mnt/gentoo/etc/portage/make.conf;
+echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe"' > /mnt/gentoo/etc/portage/make.conf;
 echo 'CFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'MAKEOPTS="-j8 -l8"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'USE="-kde -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm minimal readline symlink ncurses cryptsetup crypt device-mapper lvm"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'VIDEO_CARDS="intel nvidia"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'USE="-kde -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm readline symlink ncurses cryptsetup crypt device-mapper lvm X alsa bash-completion dbus xinerama elogind suid savedconfig"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf;
 
