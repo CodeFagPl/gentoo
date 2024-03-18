@@ -52,7 +52,6 @@ fs=btrfs;
 mkswap -L SWAP /dev/lvmSystem/volSwap;
 mkfs.$fs -L ROOT /dev/lvmSystem/volRoot;
 mkfs.$fs -L HOME /dev/lvmSystem/volHome;
-mkfs.$fs -L NODE /dev/lvmSystem/volNode;
 
 
 ##Mounting Partitions##
@@ -86,7 +85,7 @@ echo 'CFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'USE="-kde -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm readline symlink ncurses cryptsetup crypt device-mapper lvm X alsa bash-completion dbus xinerama elogind suid savedconfig zstd lz4"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'USE="-kde -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm readline symlink ncurses cryptsetup crypt device-mapper lvm X alsa bash-completion dbus xinerama elogind suid savedconfig zstd"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf;
