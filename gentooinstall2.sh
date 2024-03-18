@@ -62,7 +62,8 @@ make menuconfig;
 make && make modules_install;
 make install;
 emerge sys-kernel/dracut;
-echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block dbus udev-rules uefi lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" root=UUID=root_uuid rd.luks.uuid=encrypted_uuid"';
+echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block dbus udev-rules uefi lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" root=UUID=root_uuid rd.luks.uuid=encrypted_uuid"' >> /etc/dracut.comf;
+echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
 dracut --kver 6.8.0-gentoo; 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
@@ -84,7 +85,7 @@ nano /boot/grub/grub.cfg;
 passwd;
 
 #set hostname edit however you want :3
-echo MoneroChan > /etc/hostname;
+echo Gentoo > /etc/hostname;
 
 #configuring the net
 emerge net-misc/dhcpcd;
@@ -104,6 +105,11 @@ rc-update add net.$net default;
 
 ##Installing tools##
 emerge syslog-ng cronie mlocate;
+echo 'app-shells/bash-completion eselect' > /etc/portage/package.use/app-shells;
+emerge app-shells/bash-completion;
+emerge net-misc/chrony;
+emerge sys-block/io-scheduler-udev-rules sys-fs/dosfstools sys-fs/btrfs-progs;
+rc-update add chronyd default;
 rc-update add syslog-ng default;
 rc-update add cronie default;
 rc-update add sshd default;
