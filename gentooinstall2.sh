@@ -39,7 +39,7 @@ env-update && source /etc/profile;
 
 ##Kernel configuration##
 #installing firmware
-echo "sys-kernel/linux-firmware compress-zstd redistributable" > /etc/portage/package.use/sys-kernel;
+echo "sys-kernel/linux-firmware compress-zstd initramfs" > /etc/portage/package.use/sys-kernel;
 emerge sys-kernel/linux-firmware;
 #echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
 #emerge sys-firmware/intel-microcode;
@@ -50,7 +50,7 @@ echo "sys-kernel/gentoo-sources experimental" >> /etc/portage/package.use/sys-ke
 emerge gentoo-sources cryptsetup lvm2;
 
 #configuring fstab file
-echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  /	  xfs	  defaults	0 1\nUUID=	  /home	  xfs	  defaults	0 1\nUUID=	  /node	  xfs	  defaults	0 1" >> /etc/fstab;
+echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  /	  btrfs	  defaults	0 1\nUUID=	  /home	  btrfs	  defaults	0 1" >> /etc/fstab;
 nano /etc/fstab;
 #genkernel method#
 cd /usr/src/linux;
@@ -62,13 +62,13 @@ make menuconfig;
 make && make modules_install;
 make install;
 emerge sys-kernel/dracut;
-echo -e 'compress="lz4"\nadd_dracutmodules+=" crypt lvm dm rootfs-block dbus udev-rules uefi lib"\nfilesystems+=" xfs vfat "\nkernel_cmdline+=" root=UUID=root_uuid rd.luks.uuid=encrypted_uuid"';
+echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block dbus udev-rules uefi lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" root=UUID=root_uuid rd.luks.uuid=encrypted_uuid"';
 dracut --kver 6.8.0-gentoo; 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="dolvm crypt_root=UUID=uuid"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="dolvm crypt_root=UUID=uuid rd.luks.allow-discards"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
