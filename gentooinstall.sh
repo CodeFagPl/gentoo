@@ -1,6 +1,7 @@
 #!/bin/bash
 ##Parameters##
 disk=sda;
+disk2=sda;
 boot=sda1;
 lvm=sda2;
 
@@ -9,6 +10,7 @@ lvm=sda2;
 
 #overriting disks with random numbers to increase security can be commented out
 dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;
+dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk2 oflag=direct status=progress || true;
 
 #opening manual disk partitioning
 fdisk /dev/$disk;
