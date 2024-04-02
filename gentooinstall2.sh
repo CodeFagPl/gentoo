@@ -69,11 +69,11 @@ dracut --kver 6.8.0-gentoo;
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="dolvm crypt_root=UUID=uuid rd.luks.allow-discards"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="dolvm crypt_root=UUID=uuid rd.luks.allow-discards root_trim=yes rd.luks.options=discard"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
-
+nano /etc/lvm/lvm.conf;
 nano /etc/default/grub;
 grub-install --efi-directory=/boot --bootloader-id=GRUB --recheck;
 grub-mkconfig -o /boot/grub/grub.cfg;
@@ -112,7 +112,6 @@ emerge sys-block/io-scheduler-udev-rules sys-fs/dosfstools sys-fs/btrfs-progs;
 rc-update add chronyd default;
 rc-update add syslog-ng default;
 rc-update add cronie default;
-rc-update add sshd default;
 rc-update add lvm boot;
 rc-update add device-mapper boot;
 rc-update add dmcrypt boot;
