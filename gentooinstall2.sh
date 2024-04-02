@@ -41,6 +41,8 @@ env-update && source /etc/profile;
 #installing firmware
 echo "sys-kernel/linux-firmware compress-zstd" > /etc/portage/package.use/sys-kernel;
 emerge sys-kernel/linux-firmware;
+emerge sys-firmware/sof-firmware;
+emerge sys-firmware/alsa-firmware;
 #echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
 #emerge sys-firmware/intel-microcode;
 
