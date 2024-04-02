@@ -68,7 +68,7 @@ mount LABEL=HOME /mnt/gentoo/home;
 
 ##Installing Base System##
 #sets current time and date
-stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240303T170409Z/stage3-amd64-hardened-openrc-20240303T170409Z.tar.xz;
+stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240331T170407Z/stage3-amd64-hardened-openrc-20240331T170407Z.tar.xz;
 
 #installing stage file
 cd /mnt/gentoo;
@@ -85,7 +85,7 @@ echo 'CFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'USE="-systemd -xz -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm colord readline symlink ncurses cryptsetup crypt device-mapper lvm X alsa bash-completion udisks xinerama elogind suid savedconfig zstd"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'USE="-systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm symlink cryptsetup crypt device-mapper lvm savedconfig zstd"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf;
