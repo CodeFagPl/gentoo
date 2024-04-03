@@ -86,6 +86,7 @@ echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe"' > /mnt/gentoo/etc/portage/make.con
 echo 'CFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf;
+echo 'EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 8"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'USE="-wayland -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm minimal bash-completion alsa symlink cryptsetup crypt device-mapper lvm savedconfig zstd"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf;
