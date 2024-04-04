@@ -52,7 +52,7 @@ echo "sys-kernel/gentoo-sources experimental" >> /etc/portage/package.use/sys-ke
 emerge gentoo-sources cryptsetup lvm2;
 
 #configuring fstab file
-echo -e "UUID=	  none	  sw	  defaults	0 0\nUUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  /	  btrfs	  defaults	0 1\nUUID=	  /home	  btrfs	  defaults	0 1" >> /etc/fstab;
+echo -e "UUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  none	  sw	  defaults	0 0\nUUID=	  /	  btrfs	  defaults	0 1\nUUID=	  /home	  btrfs	  defaults	0 1" >> /etc/fstab;
 nano /etc/fstab;
 #genkernel method#
 cd /usr/src/linux;
@@ -64,14 +64,14 @@ make menuconfig;
 make && make modules_install;
 make install;
 emerge sys-kernel/dracut;
-echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block udev-rules uefi lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" root=UUID=root_uuid rd.luks.uuid=encrypted_uuid"' >> /etc/dracut.comf;
+echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block udev-rules base fs-lib uefi-lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" root=UUID=root_uuid rd.luks.uuid=encrypted_uuid rootfstype=btrfs rd.luks.allow-discards "' >> /etc/dracut.comf;
 echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
 dracut --kver 6.8.3-gentoo; 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="dolvm crypt_root=UUID=uuid rd.luks.allow-discards root_trim=yes rd.luks.options=discard"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="dolvm crypt_root=UUID=uuid resume=UUID=swap_uuid"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
