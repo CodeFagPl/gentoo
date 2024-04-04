@@ -64,7 +64,7 @@ make menuconfig;
 make && make modules_install;
 make install;
 emerge sys-kernel/dracut;
-echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block udev-rules base fs-lib uefi-lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" ro root=UUID=root_uuid resume=UUID=swap_uuid rd.luks.uuid=encrypted_disk_uuid rootfstype=btrfs rd.luks.allow-discards "' >> /etc/dracut.comf;
+echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block udev-rules base fs-lib uefi-lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" ro root=UUID=root_uuid resume=UUID=swap_uuid rd.luks.uuid=encrypted_disk_uuid rootfstype=btrfs rd.luks.allow-discards "' >> /etc/dracut.conf;
 echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
 dracut --kver 6.8.3-gentoo; 
 ##installing grub##
