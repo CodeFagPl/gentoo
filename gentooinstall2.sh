@@ -116,7 +116,7 @@ rc-update add net.$net default;
 
 
 ##Installing tools##
-emerge syslog-ng cronie mlocate;
+emerge syslog-ng cronie;
 echo 'app-shells/bash-completion eselect' > /etc/portage/package.use/app-shells;
 emerge app-shells/bash-completion;
 emerge net-misc/chrony;
