@@ -61,21 +61,31 @@ echo "sys-kernel/installkernel uki" >> /etc/portage/package.use/sys-kernel;
 emerge sys-kernel/installkernel;
 #manual method#
 make menuconfig;
-make && make modules_install;
+make -j3 && make -j3 modules_install;
 make install;
 emerge sys-kernel/dracut;
-echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block udev-rules base fs-lib uefi-lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=" ro root=UUID=root_uuid resume=UUID=swap_uuid rd.luks.uuid=encrypted_disk_uuid rootfstype=btrfs rd.luks.allow-discards "' >> /etc/dracut.conf;
-echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
+echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block udev-rules base fs-lib uefi-lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=""' >> /etc/dracut.conf;
 dracut --kver 6.8.3-gentoo; 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="rootdelay=3"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=UUID=encrypted_uuid:lvm-system:allowdiscards root=UUID=root_uuid rootfstype=btrfs dolvm quiet resume=UUID=swap_uuid rootdelay=3 net.ifnames=0"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
 nano /etc/lvm/lvm.conf;
+    #Set: 
+    #    allow-discards = 1
+    #    devices {
+    #    multipath_component_detection = 0
+    #    md_component_detection = 0
+    #    }
+ 
+    #    activation {
+    #    udev_sync = 0
+    #    udev_rules = 0
+    #    }
 nano /etc/default/grub;
 grub-install --efi-directory=/boot --bootloader-id=GRUB --recheck;
 grub-mkconfig -o /boot/grub/grub.cfg;
