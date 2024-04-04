@@ -64,13 +64,14 @@ make menuconfig;
 make -j3 && make -j3 modules_install;
 make install;
 emerge sys-kernel/dracut;
-echo -e 'compress="zstd"\nadd_dracutmodules+=" crypt lvm dm rootfs-block udev-rules base fs-lib uefi-lib"\nfilesystems+=" btrfs vfat "\nkernel_cmdline+=""' >> /etc/dracut.conf;
+echo -e 'compress="zstd"\nadd_dracutmodules+="crypt lvm dm rootfs-block udev-rules base fs-lib uefi-lib"\nfilesystems+="btrfs vfat"\nkernel_cmdline+="root=UUID=root_uuid rd.luks.uuid=encrypted_uuid"' >> /etc/dracut.conf;
+echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
 dracut --kver 6.8.3-gentoo; 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=UUID=encrypted_uuid:lvm-system:allowdiscards root=UUID=root_uuid rootfstype=btrfs dolvm quiet resume=UUID=swap_uuid rootdelay=3 net.ifnames=0"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="crypt_root=UUID= root=UUID= rootfstype=btrfs dolvm quiet resume=UUID=swap_uuid rootdelay=3 net.ifnames=0"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
