@@ -71,9 +71,9 @@ dracut --kver 6.8.3-gentoo;
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-#grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="resume=UUID=swap_uuid"';
+grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="rootdelay=3"';
 
-#echo "$grubconfig" >> /etc/default/grub;
+echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
 nano /etc/lvm/lvm.conf;
 nano /etc/default/grub;
