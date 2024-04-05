@@ -47,7 +47,7 @@ emerge sys-firmware/alsa-firmware;
 #emerge sys-firmware/intel-microcode;
 
 #installing genkernel optional can be commented out and done manually
-#echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
+echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
 echo "sys-kernel/gentoo-sources experimental" >> /etc/portage/package.use/sys-kernel;
 emerge gentoo-sources cryptsetup lvm2;
 
@@ -63,16 +63,18 @@ emerge sys-kernel/installkernel;
 make menuconfig;
 make -j3 && make -j3 modules_install;
 make install;
-emerge sys-kernel/dracut;
+
+genkernel --lvm --luks initramfs;
+#emerge sys-kernel/dracut;
 #kernel_cmdline+="root=UUID=root_uuid rd.luks.uuid=encrypted_uuid
-echo -e 'compress="zstd"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="btrfs vfat"' >> /etc/dracut.conf;
-echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
-dracut --kver 6.8.4-gentoo; 
+#echo -e 'compress="zstd"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="btrfs vfat"' >> /etc/dracut.conf;
+#echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
+#dracut --kver 6.8.4-gentoo; 
 ##installing grub##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX_DEFAULT="crypt_root=UUID= rootfstype=btrfs dolvm quiet resume=UUID=swap_uuid net.ifnames=0"';
+grubconfig='GRUB_CMDLINE_LINUX="root=UUID= crypt_root=UUID= rootfstype=btrfs dolvm quiet resume=UUID=swap_uuid root_trim=yes net.ifnames=0"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
