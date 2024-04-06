@@ -1,8 +1,8 @@
 #!/bin/bash
 ##Parameters##
-disk=sda;
-boot=sda1;
-lvm=sda2;
+disk=sda; #disk name
+boot=sda1; #boot partition
+lvm=sda2; #lvm partition
 
 #continuation from previous file
 env-update && source /etc/profile;
@@ -14,24 +14,25 @@ cp /usr/share/portage/config/repos.conf /etc/portage/repos.conf/gentoo.conf;
 echo "sync-git-verify-commit-signature = yes" >> /etc/portage/repos.conf/gentoo.conf;
 emerge-webrsync;
 
-##Adding Mirrors##
+#adding mirrors
 echo 'GENTOO_MIRRORS="http://ftp.vectranet.pl/gentoo/"' >> /etc/portage/make.conf;
 emerge --sync;
 
-##Adding cpu flags##
+#adding cpu flags
 emerge app-portage/cpuid2cpuflags;
 echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags;
 
-##Updating @world flags##
+#updating @world flags
 emerge --verbose --update --deep --newuse @world;
+
 
 ##Setting Timezone##
 #edit according to your settings
-echo "Europe/Warsaw" > /etc/timezone;
+echo "Europe/Warsaw" > /etc/timezone; #change to match your timezone
 emerge --config sys-libs/timezone-data;
 
 #updating locale
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen;
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen; #change locale to your preffered
 locale-gen;
 echo -e 'LANG="en_US.UTF-8"\nLC_COLLATE="C.UTF-8"' >> /etc/env.d/02locale;
 env-update && source /etc/profile;
@@ -43,61 +44,62 @@ echo "sys-kernel/linux-firmware compress-zstd" > /etc/portage/package.use/sys-ke
 emerge sys-kernel/linux-firmware;
 emerge sys-firmware/sof-firmware;
 emerge sys-firmware/alsa-firmware;
-#echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
-#emerge sys-firmware/intel-microcode;
 
-#installing genkernel optional can be commented out and done manually
+#uncomment if you use intel cpu
+#echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
+#emerge sys-firmware/intel-microcode; 
+
+#installing kernel source
 echo "sys-kernel/gentoo-sources experimental" >> /etc/portage/package.use/sys-kernel;
 emerge gentoo-sources cryptsetup lvm2;
 
 #configuring fstab file
-echo -e "UUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  none	  swap	  defaults	0 0\nUUID=	  /	  btrfs	  defaults	0 1\nUUID=	  /home	  btrfs	  defaults	0 1" >> /etc/fstab;
+echo -e "UUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  none	  swap	  defaults	0 0\nUUID=	  /	  btrfs	  defaults	0 1\nUUID=	  /home	  btrfs	  defaults	0 1" >> /etc/fstab; #insert your disks UUIDs here
 nano /etc/fstab;
-#genkernel method#
+
+#configuring the kernel itself
 cd /usr/src/linux;
-#enable LUKS AND LVM
 echo "sys-kernel/installkernel uki" >> /etc/portage/package.use/sys-kernel;
 emerge sys-kernel/installkernel;
-#manual method#
 make menuconfig;
-make -j8 && make -j8 modules_install;
+make -j8 && make -j8 modules_install; #change jobs to match your make.conf setting
 make install;
 
+#generating initramfs
 emerge sys-kernel/dracut;
 echo -e 'compress="zstd"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="btrfs vfat"\nkernel_cmdline="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=btrfs rootflags=ro,relatime"' >> /etc/dracut.conf;
 echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
-dracut --kver 6.8.4-gentoo; 
-##installing grub##
+dracut --kver 6.8.4-gentoo; #change to match kernel version you will download
+
+
+##Configuring the bootloader##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX="quiet net.ifnames=0"';
+grubconfig='GRUB_CMDLINE_LINUX="quiet net.ifnames=0"'; #you can change your cmdline arguments according to your needs
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
-nano /etc/lvm/lvm.conf;
-    #Set: 
-    #    allow-discards = 1
-nano /etc/default/grub;
+
+nano /etc/lvm/lvm.conf; #Set: allow-discards = 1    
+nano /etc/default/grub; #check if everything is alright
+
 grub-install --efi-directory=/boot --bootloader-id=GRUB --recheck;
 grub-mkconfig -o /boot/grub/grub.cfg;
 nano /boot/grub/grub.cfg;
 
 
 ##Finalization##
-#setting password for root
-passwd;
+passwd; #setting password for root
 
-#set hostname edit however you want :3
-echo Gentoo > /etc/hostname;
+echo Gentoo > /etc/hostname; #set hostname edit however you want :3
 
 #configuring the net
 emerge net-misc/dhcpcd;
 rc-update add dhcpcd default;
 rc-service dhcpcd start;
 
-#here insert the name of your net controller
-net=enp4s0;
+net=enp4s0; #here insert the name of your net controller
 beg='config_'"$net";
 end='="dhcp"';
 netconfig="$beg""$end";
