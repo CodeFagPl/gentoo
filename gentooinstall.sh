@@ -1,9 +1,9 @@
 #!/bin/bash
 ##Parameters##
-disk=sda;
+disk=sda; #disk name
 disk2=sda;
-boot=sda1;
-lvm=sda2;
+boot=sda1; #boot partition
+lvm=sda2; #lvm partition
 
 
 ##Preparing Disks##
