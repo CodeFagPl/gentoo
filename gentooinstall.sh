@@ -12,55 +12,39 @@ lvm=sda2;
 dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;
 dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk2 oflag=direct status=progress || true;
 
-#opening manual disk partitioning
-fdisk /dev/$disk;
-
-#formatting boot partition
-mkfs.vfat -n BOOT -F 32 /dev/$boot;
-
+fdisk /dev/$disk; #opening manual disk partitioning
 
 ##LVM SETUP##
-#encrypting disk
-cryptsetup -v -y -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random luksFormat /dev/$lvm;
+cryptsetup -v -y -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random luksFormat /dev/$lvm; #encrypting disk
+cryptsetup luksOpen /dev/$lvm lvm-system; #opening disk in order to create lvm
+pvcreate /dev/mapper/lvm-system; #creates physical  volume
+vgcreate lvmSystem /dev/mapper/lvm-system; #creates lvm group of logical volumes
 
-#opening disk in order to create lvm
-cryptsetup luksOpen /dev/$lvm lvm-system;
+#can be changed according to your needs
+lvcreate --contiguous y --size 16G lvmSystem --name volSwap; #creates logical volume for Swap partition
+lvcreate --contiguous y --size 50G lvmSystem --name volRoot; #creates logical volume for Root partition
+lvcreate --contiguous y --extents +100%FREE lvmSystem --name volHome; #creates logical volume for Home partition
 
-
-#creates physical  volume
-pvcreate /dev/mapper/lvm-system;
-
-
-#creates lvm group of logical volumes
-vgcreate lvmSystem /dev/mapper/lvm-system;
-
-#creating logical volumes
-lvcreate --contiguous y --size 16G lvmSystem --name volSwap;
-lvcreate --contiguous y --size 50G lvmSystem --name volRoot;
-lvcreate --contiguous y --extents +100%FREE lvmSystem --name volHome;
-lvdisplay;
-
-#scans for available lvms
-vgscan;
-
-#activates lvms
-vgchange;
+vgscan; #scans for available lvms
+vgchange;#activates lvms
 
 
 ##Formatting Partitions##
 #edit this part to your liking
 fs=btrfs;
-
-mkswap -L SWAP /dev/lvmSystem/volSwap;
+#fs_format  params  path
+mkfs.vfat -n BOOT -F 32 /dev/$boot;
+mkswap -L SWAP /dev/lvmSystem/volSwap; 
 mkfs.$fs -L ROOT /dev/lvmSystem/volRoot;
 mkfs.$fs -L HOME /dev/lvmSystem/volHome;
 
 
 ##Mounting Partitions##
 
-swapon LABEL=SWAP;
-mkdir -p /mnt/gentoo;
-mount LABEL=ROOT /mnt/gentoo;
+#before mounting you always need to create a mountpoint
+swapon LABEL=SWAP; #exception is swap
+mkdir -p /mnt/gentoo; #mountpoint for root
+mount LABEL=ROOT /mnt/gentoo; #mounting root
 mkdir -p /mnt/gentoo/boot;
 mount LABEL=BOOT /mnt/gentoo/boot;
 mkdir -p /mnt/gentoo/home;
@@ -69,29 +53,27 @@ mount LABEL=HOME /mnt/gentoo/home;
 
 
 ##Installing Base System##
-#sets current time and date
-stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240331T170407Z/stage3-amd64-hardened-openrc-20240331T170407Z.tar.xz;
+stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240331T170407Z/stage3-amd64-hardened-openrc-20240331T170407Z.tar.xz; #insert a link for your desired stage file
 
 #installing stage file
 cd /mnt/gentoo;
-wget $stage;
-tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner;
+wget $stage; #downloads the stage file
+tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner; #untars it
 
 #change to the directory your file is in
 cp /home/mint/gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;
 
 #setting make.conf 
-#edit here to your liking
-echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe"' > /mnt/gentoo/etc/portage/make.conf;
+echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe"' > /mnt/gentoo/etc/portage/make.conf; # edit -march to =native for default setting or to your specific cpu, look up the wiki
 echo 'CFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 8"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'USE="-wayland -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm bash-completion alsa symlink cryptsetup crypt device-mapper lvm savedconfig zstd"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf;
-echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf;
+echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf; #use rule -j[RAM/2GB] -l[thread count]
+echo 'EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 12"' >> /mnt/gentoo/etc/portage/make.conf; #same here
+echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf; #you can accept or decline licenses here
+echo 'USE="-wayland -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm bash-completion alsa symlink cryptsetup crypt device-mapper lvm savedconfig zstd"' >> /mnt/gentoo/etc/portage/make.conf; #better left alone unless you know what to do 
+echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf; #change to whatever gpu you use, look up the wiki
+echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf; 
+echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf; #if you don't have uefi boot delete or comment the line
 
 #chrooting
 cp --dereference /etc/resolv.conf /mnt/gentoo/etc/;
