@@ -47,7 +47,6 @@ emerge sys-firmware/alsa-firmware;
 #emerge sys-firmware/intel-microcode;
 
 #installing genkernel optional can be commented out and done manually
-echo "sys-kernel/genkernel firmware" >> /etc/portage/package.use/sys-kernel;
 echo "sys-kernel/gentoo-sources experimental" >> /etc/portage/package.use/sys-kernel;
 emerge gentoo-sources cryptsetup lvm2;
 
@@ -61,7 +60,7 @@ echo "sys-kernel/installkernel uki" >> /etc/portage/package.use/sys-kernel;
 emerge sys-kernel/installkernel;
 #manual method#
 make menuconfig;
-make -j3 && make -j3 modules_install;
+make -j8 && make -j8 modules_install;
 make install;
 
 emerge sys-kernel/dracut;
@@ -72,7 +71,7 @@ dracut --kver 6.8.4-gentoo;
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
 emerge grub gentoolkit;
 
-grubconfig='GRUB_CMDLINE_LINUX="net.ifnames=0"';
+grubconfig='GRUB_CMDLINE_LINUX="quiet net.ifnames=0"';
 
 echo "$grubconfig" >> /etc/default/grub;
 echo 'GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
