@@ -40,11 +40,11 @@ env-update && source /etc/profile;
 
 ##Kernel configuration##
 #installing firmware
-echo "sys-kernel/linux-firmware compress-zstd" > /etc/portage/package.use/sys-kernel;
+emerge app-arch/lz4;
 emerge sys-kernel/linux-firmware;
 emerge sys-firmware/sof-firmware;
 emerge sys-firmware/alsa-firmware;
-
+env-update && source /etc/profile;
 #uncomment if you use intel cpu
 #echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
 #emerge sys-firmware/intel-microcode; 
@@ -67,8 +67,7 @@ make install;
 
 #generating initramfs
 emerge sys-kernel/dracut;
-echo -e 'compress="zstd"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="btrfs vfat"\nkernel_cmdline="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=btrfs rootflags=ro,relatime"' >> /etc/dracut.conf;
-echo 'early_microcode="yes"' > /etc/dracut.conf.d/microcode.conf;
+echo -e 'compress="lz4"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="btrfs vfat"\nkernel_cmdline+="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=btrfs rootflags=ro,relatime"' >> /etc/dracut.conf;
 dracut --kver 6.8.4-gentoo; #change to match kernel version you will download
 
 
