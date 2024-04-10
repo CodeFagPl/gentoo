@@ -53,7 +53,7 @@ mount LABEL=HOME /mnt/gentoo/home;
 
 
 ##Installing Base System##
-stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240331T170407Z/stage3-amd64-hardened-openrc-20240331T170407Z.tar.xz; #insert a link for your desired stage file
+stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20240407T165048Z/stage3-amd64-openrc-20240407T165048Z.tar.xz; #insert a link for your desired stage file
 
 #installing stage file
 cd /mnt/gentoo;
@@ -70,7 +70,7 @@ echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf; #use rule -j[RAM/2GB] -l[thread count]
 echo 'EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 12"' >> /mnt/gentoo/etc/portage/make.conf; #same here
 echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf; #you can accept or decline licenses here
-echo 'USE="-wayland -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm bash-completion alsa symlink cryptsetup crypt device-mapper lvm savedconfig zstd"' >> /mnt/gentoo/etc/portage/make.conf; #better left alone unless you know what to do 
+echo 'USE="-systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm bash-completion alsa symlink cryptsetup crypt device-mapper lvm savedconfig X udev udisks elogind dbus"' >> /mnt/gentoo/etc/portage/make.conf; #better left alone unless you know what to do 
 echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf; #change to whatever gpu you use, look up the wiki
 echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf; 
 echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf; #if you don't have uefi boot delete or comment the line
