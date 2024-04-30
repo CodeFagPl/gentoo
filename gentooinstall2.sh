@@ -54,10 +54,10 @@ env-update && source /etc/profile;
 
 ##Kernel configuration##
 #installing firmware
-emerge app-arch/lz4;
-emerge sys-kernel/linux-firmware;
-emerge sys-firmware/sof-firmware;
-emerge sys-firmware/alsa-firmware;
+emerge -g app-arch/lz4;
+emerge -g sys-kernel/linux-firmware;
+emerge -g sys-firmware/sof-firmware;
+emerge -g sys-firmware/alsa-firmware;
 env-update && source /etc/profile;
 #uncomment if you use intel cpu
 #echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
@@ -82,12 +82,12 @@ make install;
 #generating initramfs
 emerge sys-kernel/dracut;
 echo -e 'compress="lz4"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="btrfs vfat"\nkernel_cmdline+="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=btrfs rootflags=ro,relatime"' >> /etc/dracut.conf;
-dracut --kver 6.8.4-gentoo; #change to match kernel version you will download
+dracut --kver 6.8.8-gentoo; #change to match kernel version you will download
 
 
 ##Configuring the bootloader##
 echo "sys-boot/grub mount device-mapper" > /etc/portage/package.use/sys-boot;
-emerge grub gentoolkit;
+emerge -g grub gentoolkit;
 
 grubconfig='GRUB_CMDLINE_LINUX="quiet net.ifnames=0"'; #you can change your cmdline arguments according to your needs
 
@@ -103,7 +103,6 @@ nano /boot/grub/grub.cfg;
 
 
 ##Finalization##
-passwd; #setting password for root
 
 echo Gentoo > /etc/hostname; #set hostname edit however you want :3
 
@@ -123,11 +122,11 @@ rc-update add net.$net default;
 
 
 ##Installing tools##
-emerge syslog-ng cronie;
+emerge -g syslog-ng cronie;
 echo 'app-shells/bash-completion eselect' > /etc/portage/package.use/app-shells;
-emerge app-shells/bash-completion;
-emerge net-misc/chrony;
-emerge sys-block/io-scheduler-udev-rules sys-fs/dosfstools sys-fs/btrfs-progs;
+emerge -g app-shells/bash-completion;
+emerge -g net-misc/chrony;
+emerge -g sys-block/io-scheduler-udev-rules sys-fs/dosfstools sys-fs/btrfs-progs;
 rc-update add chronyd default;
 rc-update add syslog-ng default;
 rc-update add cronie default;
