@@ -22,8 +22,22 @@ emerge --sync;
 emerge app-portage/cpuid2cpuflags;
 echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags;
 
+##Addinng Binary Repos##
+echo 'BINPKG_FORMAT="gpkg"'>> /etc/portage/make.conf;
+echo 'FEATURES="getbinpkg"'>> /etc/portage/make.conf;
+emerge app-portage/getuto;
+getuto;
+#check password in /etc/portage/gnupg/pass dir
+gpg --homedir=/etc/portage/gnupg --import 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910;
+gpg --homedir=/etc/portage/gnupg --edit-key 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910; #sign -> yes  trust -> 4  save
+gpg --homedir=/etc/portage/gnupg --check-trustdb;
+echo 'FEATURES="binpkg-request-signature"'>> /etc/portage/make.conf;
+emerge --sync;
+rm -r /etc/portage/binrepos.conf;
+echo -e '[binhost]\nsync-uri = http://ftp.vectranet.pl/gentoo/releases/amd64/binpackages/23.0/x86-64/\npriority = 10' > /etc/portage/binrepos.conf;
+
 #updating @world flags
-emerge --verbose --update --deep --newuse @world;
+emerge -vguDN @world;
 
 
 ##Setting Timezone##
