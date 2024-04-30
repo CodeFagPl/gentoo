@@ -126,7 +126,7 @@ emerge -g syslog-ng cronie;
 echo 'app-shells/bash-completion eselect' > /etc/portage/package.use/app-shells;
 emerge -g app-shells/bash-completion;
 emerge -g net-misc/chrony;
-emerge -g sys-block/io-scheduler-udev-rules sys-fs/dosfstools sys-fs/btrfs-progs;
+emerge -g sys-block/io-scheduler-udev-rules sys-fs/dosfstools sys-fs/e2fsprogs;
 rc-update add chronyd default;
 rc-update add syslog-ng default;
 rc-update add cronie default;
