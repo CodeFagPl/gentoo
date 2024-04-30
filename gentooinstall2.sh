@@ -68,7 +68,7 @@ echo "sys-kernel/gentoo-sources experimental" >> /etc/portage/package.use/sys-ke
 emerge gentoo-sources cryptsetup lvm2;
 
 #configuring fstab file
-echo -e "UUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  none	  swap	  defaults	0 0\nUUID=	  /	  btrfs	  defaults	0 1\nUUID=	  /home	  btrfs	  defaults	0 1" >> /etc/fstab; #insert your disks UUIDs here
+echo -e "UUID=	  /boot	  vfat	  noatime		0 2\nUUID=	  none	  swap	  defaults	0 0\nUUID=	  /	  ext4	  defaults	0 1\nUUID=	  /home	  ext4	  defaults	0 1" >> /etc/fstab; #insert your disks UUIDs here
 nano /etc/fstab;
 
 #configuring the kernel itself
@@ -81,7 +81,7 @@ make install;
 
 #generating initramfs
 emerge sys-kernel/dracut;
-echo -e 'compress="lz4"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="btrfs vfat"\nkernel_cmdline+="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=btrfs rootflags=ro,relatime"' >> /etc/dracut.conf;
+echo -e 'compress="lz4"\nadd_dracutmodules+="crypt lvm dm rootfs-block "\nfilesystems+="ext4 vfat"\nkernel_cmdline+="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=btrfs rootflags=ro,relatime"' >> /etc/dracut.conf;
 dracut --kver 6.8.8-gentoo; #change to match kernel version you will download
 
 
