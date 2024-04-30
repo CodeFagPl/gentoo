@@ -22,7 +22,7 @@ vgcreate lvmSystem /dev/mapper/lvm-system; #creates lvm group of logical volumes
 
 #can be changed according to your needs
 lvcreate --contiguous y --size 16G lvmSystem --name volSwap; #creates logical volume for Swap partition
-lvcreate --contiguous y --size 50G lvmSystem --name volRoot; #creates logical volume for Root partition
+lvcreate --contiguous y --size 100G lvmSystem --name volRoot; #creates logical volume for Root partition
 lvcreate --contiguous y --extents +100%FREE lvmSystem --name volHome; #creates logical volume for Home partition
 
 vgscan; #scans for available lvms
@@ -31,7 +31,7 @@ vgchange;#activates lvms
 
 ##Formatting Partitions##
 #edit this part to your liking
-fs=btrfs;
+fs=ext4;
 #fs_format  params  path
 mkfs.vfat -n BOOT -F 32 /dev/$boot;
 mkswap -L SWAP /dev/lvmSystem/volSwap; 
@@ -70,7 +70,7 @@ echo 'CXXFLAGS="${COMMON_FLAGS}"' >> /mnt/gentoo/etc/portage/make.conf;
 echo 'MAKEOPTS="-j8 -l12"' >> /mnt/gentoo/etc/portage/make.conf; #use rule -j[RAM/2GB] -l[thread count]
 echo 'EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 12"' >> /mnt/gentoo/etc/portage/make.conf; #same here
 echo 'ACCEPT_LICENSE="*"' >> /mnt/gentoo/etc/portage/make.conf; #you can accept or decline licenses here
-echo 'USE="-systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm bash-completion alsa symlink cryptsetup crypt device-mapper lvm savedconfig X udev udisks elogind dbus"' >> /mnt/gentoo/etc/portage/make.conf; #better left alone unless you know what to do 
+echo 'USE="-wayland -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -cjk -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm bash-completion alsa symlink cryptsetup crypt device-mapper lvm X"' >> /mnt/gentoo/etc/portage/make.conf; #better left alone unless you know what to do 
 echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /mnt/gentoo/etc/portage/make.conf; #change to whatever gpu you use, look up the wiki
 echo 'ACCEPT_KEYWORDS="~amd64"' >> /mnt/gentoo/etc/portage/make.conf; 
 echo 'GRUB_PLATFORM="efi-64"' >>  /mnt/gentoo/etc/portage/make.conf; #if you don't have uefi boot delete or comment the line
