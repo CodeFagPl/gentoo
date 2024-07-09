@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 ##Parameters##
 disk=sda; #disk name
 boot=sda1; #boot partition
@@ -23,12 +23,11 @@ emerge app-portage/cpuid2cpuflags;
 echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags;
 
 ##Addinng Binary Repos##
-echo 'BINPKG_FORMAT="gpkg"'>> /etc/portage/make.conf;
-echo 'FEATURES="getbinpkg"'>> /etc/portage/make.conf;
 emerge app-portage/getuto;
 getuto;
-#check password in /etc/portage/gnupg/pass dir
-gpg --homedir=/etc/portage/gnupg --import 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910;
+echo 'BINPKG_FORMAT="gpkg"'>> /etc/portage/make.conf;
+echo 'FEATURES="getbinpkg"'>> /etc/portage/make.conf;
+nano /etc/portage/gnupg/pass; #check password in /etc/portage/gnupg/pass dir
 gpg --homedir=/etc/portage/gnupg --edit-key 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910; #sign -> yes  trust -> 4  save
 gpg --homedir=/etc/portage/gnupg --check-trustdb;
 echo 'FEATURES="binpkg-request-signature"'>> /etc/portage/make.conf;
@@ -57,7 +56,6 @@ env-update && source /etc/profile;
 emerge -g app-arch/lz4;
 emerge -g sys-kernel/linux-firmware;
 emerge -g sys-firmware/sof-firmware;
-emerge -g sys-firmware/alsa-firmware;
 env-update && source /etc/profile;
 #uncomment if you use intel cpu
 #echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;
@@ -73,7 +71,6 @@ nano /etc/fstab;
 
 #configuring the kernel itself
 cd /usr/src/linux;
-echo "sys-kernel/installkernel uki" >> /etc/portage/package.use/sys-kernel;
 emerge sys-kernel/installkernel;
 make menuconfig;
 make -j8 && make -j8 modules_install; #change jobs to match your make.conf setting
@@ -124,10 +121,8 @@ rc-update add net.$net default;
 ##Installing tools##
 emerge -g syslog-ng cronie;
 echo 'app-shells/bash-completion eselect' > /etc/portage/package.use/app-shells;
-emerge -g app-shells/bash-completion;
-emerge -g net-misc/chrony;
+emerge -g app-shells/bash-completion;;
 emerge -g sys-block/io-scheduler-udev-rules sys-fs/dosfstools sys-fs/e2fsprogs;
-rc-update add chronyd default;
 rc-update add syslog-ng default;
 rc-update add cronie default;
 rc-update add lvm boot;
