@@ -25,9 +25,6 @@ lvcreate --contiguous y --size 16G lvmSystem --name volSwap; #creates logical vo
 lvcreate --contiguous y --size 100G lvmSystem --name volRoot; #creates logical volume for Root partition
 lvcreate --contiguous y --extents +100%FREE lvmSystem --name volHome; #creates logical volume for Home partition
 
-vgscan; #scans for available lvms
-vgchange;#activates lvms
-
 
 ##Formatting Partitions##
 #edit this part to your liking
