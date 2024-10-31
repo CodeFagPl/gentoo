@@ -4,7 +4,6 @@ disk=sda; # main drive name
 boot=sda1; #boot partition
 lvm=sda2; #lvm partition
 
-
 ##Preparing Disks##
 dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;  #overriting disks with random numbers to increase security can be commented out, as it takes some time
 dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk2 oflag=direct status=progress || true;
@@ -20,7 +19,6 @@ lvcreate --contiguous y --size 16G lvmSystem --name volSwap; #creates logical vo
 lvcreate --contiguous y --size 100G lvmSystem --name volRoot; #creates logical volume for Root partition  #change this part if you need more or less partitions
 lvcreate --contiguous y --extents +100%FREE lvmSystem --name volHome; #creates logical volume for Home partition
 
-
 ##Formatting Partitions##
 fs=ext4;
 #fs_format  params  path
@@ -28,7 +26,6 @@ mkfs.vfat -n BOOT -F 32 /dev/$boot;
 mkswap -L SWAP /dev/lvmSystem/volSwap;  #edit this part according to your partition settings
 mkfs.$fs -L ROOT /dev/lvmSystem/volRoot;
 mkfs.$fs -L HOME /dev/lvmSystem/volHome;
-
 
 ##Mounting Partitions##
 swapon LABEL=SWAP;  #mounting by label work will only work if you applied labels to your partitions
@@ -38,8 +35,6 @@ mkdir -p /mnt/gentoo/boot;
 mount LABEL=BOOT /mnt/gentoo/boot;
 mkdir -p /mnt/gentoo/home;
 mount LABEL=HOME /mnt/gentoo/home;
-
-
 
 ##Installing Base System##
 stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20241027T164832Z/stage3-amd64-openrc-20241027T164832Z.tar.xz; #insert a link for your desired stage file
