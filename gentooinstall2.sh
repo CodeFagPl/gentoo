@@ -50,7 +50,7 @@ env-update && . /etc/profile;
 emerge -g app-arch/lz4;  #necessary for lz4 compression of kernel modules
 emerge -g sys-kernel/linux-firmware;
 emerge -g sys-firmware/sof-firmware;
-env-update && source /etc/profile;
+env-update && . /etc/profile;
 #echo "sys-firmware/intel-microcode hostonly" > /etc/portage/package.use/sys-firmware;  #uncomment if you use intel cpu
 #emerge sys-firmware/intel-microcode; 
 
