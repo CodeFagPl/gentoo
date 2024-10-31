@@ -91,7 +91,6 @@ grub-install --efi-directory=/boot --bootloader-id=GRUB --recheck;
 grub-mkconfig -o /boot/grub/grub.cfg;
 nano /boot/grub/grub.cfg;
 
-
 ##Finalization##
 echo Gentoo > /etc/hostname; #set hostname edit however you want :3
 emerge net-misc/dhcpcd;  #configuring the net, if you do not want dhcp comment it out
@@ -105,7 +104,6 @@ echo "$netconfig" >> /etc/conf.d/net;
 cd /etc/init.d;
 ln -s net.lo net.$net;
 rc-update add net.$net default;
-
 
 ##Installing tools##
 emerge -g syslog-ng cronie;
