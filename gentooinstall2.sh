@@ -12,7 +12,7 @@ cp /usr/share/portage/config/repos.conf /etc/portage/repos.conf/gentoo.conf;
 echo "sync-git-verify-commit-signature = yes" >> /etc/portage/repos.conf/gentoo.conf;
 emerge-webrsync;
 
-echo 'GENTOO_MIRRORS="http://ftp.vectranet.pl/gentoo/"' >> /etc/portage/make.conf;  #adding mirrors
+echo 'GENTOO_MIRRORS="https://mirror.wheel.sk/gentoo"' >> /etc/portage/make.conf;  #adding mirrors
 emerge --sync;
 
 emerge app-portage/cpuid2cpuflags;  #adding cpu flags
@@ -30,7 +30,8 @@ echo 'FEATURES="binpkg-request-signature"'>> /etc/portage/make.conf;
 emerge --sync;
 rm -r /etc/portage/binrepos.conf;
 echo '[binhost]
-sync-uri = http://ftp.vectranet.pl/gentoo/releases/amd64/binpackages/23.0/x86-64/\npriority = 10' > /etc/portage/binrepos.conf;
+sync-uri = https://mirror.wheel.sk/gentoo/releases/amd64/binpackages/23.0/x86-64/
+priority = 10' > /etc/portage/binrepos.conf;
 
 emerge -vguDN @world;  #updating @world flags
 
@@ -75,8 +76,9 @@ make install;
 emerge sys-kernel/dracut;
 echo 'compress="lz4"
 add_dracutmodules+="crypt lvm dm rootfs-block "
-filesystems+="ext4 vfat"\nkernel_cmdline+="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=ext4 rootflags=ro,relatime"' >> /etc/dracut.conf;
-dracut --kver 6.8.8-gentoo;  #change to match kernel version you will download
+filesystems+="ext4 vfat"
+kernel_cmdline+="root=UUID= resume=UUID= rd.luks.uuid= rd.luks.allow-discards rootfstype=ext4 rootflags=ro,relatime"' >> /etc/dracut.conf;
+dracut --kver 6.11.7-gentoo;  #change to match kernel version you will download
 
 
 ##Configuring the bootloader##
