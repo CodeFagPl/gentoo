@@ -5,8 +5,14 @@ boot=sda1; #boot partition
 lvm=sda2; #lvm partition
 
 ##Preparing Disks##
-dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;  #overriting disks with random numbers to increase security can be commented out, as it takes some time
-fdisk /dev/$disk;
+#dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;  #overriting disks with random numbers to increase security can be commented out, as it takes some time
+parted -s /dev/$disk mklabel gpt;
+parted -s -a optimal /dev/$boot mkpart "primary" "fat32" "0%" "500MiB";
+parted -s /dev/$boot set 1 boot on;
+parted -s -a optimal /dev/$lvm mkpart "primary" "ext4" "500MiB" "100%"
+parted -s /dev/$lvm set 2 lvm on;
+parted -s /dev/$boot align-check optimal 1;
+parted -s /dev/$lvm align-check optimal 2;
 
 ##LVM SETUP##
 cryptsetup -v -y -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random luksFormat /dev/$lvm;
@@ -39,7 +45,7 @@ stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20241027T164832Z/st
 cd /mnt/gentoo;
 wget $stage;                                                             
 tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner;
-cp /home/mint/gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;  #change to the directory your file is in
+cp /gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;  #change to the directory your file is in
 
 ##Setting make.conf##
 echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe"
@@ -48,8 +54,8 @@ CXXFLAGS="${COMMON_FLAGS}"
 MAKEOPTS="-j8 -l12"
 EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 12"
 ACCEPT_LICENSE="*"
-USE="-wayland -systemd -gnome -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm cryptsetup crypt device-mapper lvm"
-VIDEO_CARDS="amdgpu radeonsi"
+USE="-wayland -systemd -gnome -kde -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm cryptsetup crypt device-mapper lvm"
+VIDEO_CARDS="amdgpu"
 ACCEPT_KEYWORDS="~amd64"
 GRUB_PLATFORM="efi-64"' > /mnt/gentoo/etc/portage/make.conf;
 
