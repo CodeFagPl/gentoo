@@ -41,20 +41,20 @@ mkdir -p /mnt/gentoo/home;
 mount LABEL=HOME /mnt/gentoo/home;
 
 ##Installing Base System##
-stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20241027T164832Z/stage3-amd64-openrc-20241027T164832Z.tar.xz;
+stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20250105T170325Z/stage3-amd64-openrc-20250105T170325Z.tar.xz;
 cd /mnt/gentoo;
 wget $stage;                                                             
 tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner;
 cp /gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;  #change to the directory your file is in
 
 ##Setting make.conf##
-echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe"
+echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe -pgo"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS}"
 MAKEOPTS="-j8 -l12"
 EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 12"
 ACCEPT_LICENSE="*"
-USE="-wayland -systemd -gnome -kde -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm cryptsetup crypt device-mapper lvm"
+USE="-webengine -gtk -qt -wayland -systemd -gnome -kde -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm cryptsetup crypt device-mapper lvm"
 VIDEO_CARDS="amdgpu"
 ACCEPT_KEYWORDS="~amd64"
 GRUB_PLATFORM="efi-64"' > /mnt/gentoo/etc/portage/make.conf;
