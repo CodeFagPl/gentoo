@@ -56,6 +56,8 @@ env-update && . /etc/profile;
 #emerge sys-firmware/intel-microcode; 
 
 echo "sys-kernel/gentoo-sources experimental symlink" >> /etc/portage/package.use/sys-kernel;  #installing kernel source
+emerge sys-kernel/modprobed-db;
+
 emerge gentoo-sources cryptsetup lvm2;
 
 ##Configuring /etc/fstab File##
@@ -66,9 +68,10 @@ UUID=	  /home	  ext4	  defaults	0 1" >> /etc/fstab; #insert your disks UUIDs her
 nano /etc/fstab;
 
 ##Kernel Hacking##
+modprobed-db store
 cd /usr/src/linux;
 emerge sys-kernel/installkernel;
-make menuconfig;
+make LSMOD=$HOME/.config/modprobed.db localmodconfig;
 make -j8 && make -j8 modules_install;  #change jobs to match your make.conf setting
 make install;
 
