@@ -21,7 +21,7 @@ pvcreate /dev/mapper/lvm-system;
 vgcreate lvmSystem /dev/mapper/lvm-system; 
 
 lvcreate --contiguous y --size 16G lvmSystem --name volSwap; #creates logical volume for Swap partition
-lvcreate --contiguous y --size 100G lvmSystem --name volRoot; #creates logical volume for Root partition  #change this part if you need more or less partitions
+lvcreate --contiguous y --size 50G lvmSystem --name volRoot; #creates logical volume for Root partition  #change this part if you need more or less partitions
 lvcreate --contiguous y --extents +100%FREE lvmSystem --name volHome; #creates logical volume for Home partition
 
 ##Formatting Partitions##
