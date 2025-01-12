@@ -45,7 +45,7 @@ stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20250105T170325Z/st
 cd /mnt/gentoo;
 wget $stage;                                                             
 tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner;
-cp /gentoo/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;  #change to the directory your file is in
+cp $(pwd)/gentooinstall2.sh /mnt/gentoo/gentooinstall2.sh;  #change to the directory your file is in
 
 ##Setting make.conf##
 echo 'COMMON_FLAGS="-march=znver2 -O2 -pipe"
