@@ -56,7 +56,7 @@ EMERGE_DEFAULT_OPTS="--jobs 8 --load-average 12"
 ACCEPT_LICENSE="*"
 USE="-webengine -gtk -qt -wayland -systemd -gnome -kde -aqua -cdinstall -cdr -css -dvd -dvdr -a52 -clamav -coreaudio -ios -ipod -iee1395 -telemetry -emacs -xemacs -emboss -3dfx -emboss -altivec -smartcard -cups -ibm cryptsetup crypt device-mapper lvm"
 VIDEO_CARDS="amdgpu"
-ACCEPT_KEYWORDS="~amd64"
+ACCEPT_KEYWORDS="amd64"
 GRUB_PLATFORM="efi-64"' > /mnt/gentoo/etc/portage/make.conf;
 
 ##Chrooting##
