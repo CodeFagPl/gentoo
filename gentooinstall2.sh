@@ -56,7 +56,7 @@ env-update && . /etc/profile;
 #emerge sys-firmware/intel-microcode; 
 
 echo "sys-kernel/gentoo-sources experimental symlink" >> /etc/portage/package.use/sys-kernel;  #installing kernel source
-emerge sys-kernel/modprobed-db;
+
 
 emerge gentoo-sources cryptsetup lvm2;
 
@@ -68,10 +68,9 @@ UUID=	  /home	  ext4	  defaults	0 1" >> /etc/fstab; #insert your disks UUIDs her
 nano /etc/fstab;
 
 ##Kernel Hacking##
-modprobed-db store
 cd /usr/src/linux;
 emerge sys-kernel/installkernel;
-make LSMOD=$HOME/.config/modprobed.db localmodconfig;
+make menuconfig
 make -j8 && make -j8 modules_install;  #change jobs to match your make.conf setting
 make install;
 
@@ -90,7 +89,7 @@ echo 'GRUB_CMDLINE_LINUX="quiet net.ifnames=0"
 GRUB_ENABLE_CRYPTODISK=y' >> /etc/default/grub;
 nano /etc/lvm/lvm.conf;  #Set: allow-discards = 1    
 nano /etc/default/grub;  #check if everything is alright
-grub-install --efi-directory=/boot --bootloader-id=GRUB --recheck;
+grub-install --efi-directory=/boot --bootloader-id=Gentoo --recheck;
 grub-mkconfig -o /boot/grub/grub.cfg;
 nano /boot/grub/grub.cfg;
 
