@@ -41,7 +41,7 @@ mkdir -p /mnt/gentoo/home;
 mount LABEL=HOME /mnt/gentoo/home;
 
 ##Installing Base System##
-stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20250105T170325Z/stage3-amd64-openrc-20250105T170325Z.tar.xz;
+stage=https://distfiles.gentoo.org/releases/amd64/autobuilds/20250119T170328Z/stage3-amd64-openrc-20250119T170328Z.tar.xz;
 cd /mnt/gentoo;
 wget $stage;                                                             
 tar xpvf stage3-* --xattrs-include='*.*' --numeric-owner;
