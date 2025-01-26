@@ -8,11 +8,11 @@ lvm=sda2; #lvm partition
 #dd bs=4096 if=/dev/urandom iflag=nocache of=/dev/$disk oflag=direct status=progress || true;  #overriting disks with random numbers to increase security can be commented out, as it takes some time
 parted -s /dev/$disk mklabel gpt;
 parted -s -a optimal /dev/$disk mkpart "primary" "fat32" "0%" "500MiB";
-parted -s /dev/$boot set 1 boot on;
+parted -s /dev/$disk set 1 boot on;
 parted -s -a optimal /dev/$disk mkpart "primary" "ext4" "500MiB" "100%"
-parted -s /dev/$lvm set 2 lvm on;
-parted -s /dev/$boot align-check optimal 1;
-parted -s /dev/$lvm align-check optimal 2;
+parted -s /dev/$disk set 2 lvm on;
+parted -s /dev/$disk align-check optimal 1;
+parted -s /dev/$disk align-check optimal 2;
 
 ##LVM SETUP##
 cryptsetup -v -y -c aes-xts-plain64 -s 512 -h sha512 -i 5000 --use-random luksFormat /dev/$lvm;
